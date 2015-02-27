@@ -16,3 +16,4 @@ Description: Utility functions to convert between the Spatial classes specified
 License: BSD_3_clause + file LICENSE
 Imports: sp
 NeedsCompilation: no
+BugReports: https://github.com/ianmcook/wkb/issues
