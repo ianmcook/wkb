@@ -3,7 +3,7 @@ Type: Package
 Title: Convert Between Spatial Objects and Well-Known Binary (WKB) Geometry
 Version: 0.1-0
 Imports: sp
-Date: 2015-02-27
+Date: 2015-02-28
 Author: TIBCO Software Inc.
 Maintainer: Ian Cook <icook@tibco.com>
 Description: Utility functions to convert between the Spatial classes specified
