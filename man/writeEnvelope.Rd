@@ -9,7 +9,7 @@ writeEnvelope(obj, centerfun = mean)
 \arguments{
 \item{obj}{object inheriting class \code{\link[sp:Spatial-class]{Spatial}}.}
 
-\item{centerfun}{the function to apply to the x-axis limits and y-axis limits
+\item{centerfun}{function to apply to the x-axis limits and y-axis limits
 of the bounding box to obtain the x-coordinate and y-coordinate of the
 center of the bounding box.}
 }

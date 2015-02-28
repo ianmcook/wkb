@@ -16,7 +16,7 @@
 #'   or a \code{list} in which each element is an object of class
 #'   \code{\link[sp:SpatialPoints-class]{SpatialPoints}} or
 #'   \code{\link[sp:SpatialPointsDataFrame-class]{SpatialPointsDataFrame}}.
-#' @param centerfun the function to apply to the x-axis limits and y-axis limits
+#' @param centerfun function to apply to the x-axis limits and y-axis limits
 #'   of the bounding box to obtain the x-coordinate and y-coordinate of the
 #'   center of the bounding box.
 #' @return A data frame with six columns named XMax, XMin, YMax, YMin, XCenter,
