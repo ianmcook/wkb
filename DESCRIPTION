@@ -1,19 +1,19 @@
 Package: wkb
 Type: Package
-Title: Conversion Between Spatial Objects and the Well-Known Binary (WKB) Representation
+Title: Convert Between Spatial Objects and Well-Known Binary (WKB) Geometry
 Version: 0.1-0
-Date: 2015-02-24
+Imports: sp
+Date: 2015-02-27
 Author: TIBCO Software Inc.
 Maintainer: Ian Cook <icook@tibco.com>
 Description: Utility functions to convert between the Spatial classes specified
-    by the package sp, and the well-known binary (WKB) representation for
-    geometry specified by the Open Geospatial Consortium (OGC). Supports Spatial
-    objects of class SpatialPoints, SpatialPointsDataFrame, SpatialLines,
-    SpatialLinesDataFrame, SpatialPolygons, and SpatialPolygonsDataFrame.
-    Supports WKB geometry types Point, LineString, Polygon, MultiPoint,
-    MultiLineString, and MultiPolygon. Includes extensions to enable creation of
-    maps with TIBCO Spotfire.
-License: BSD_3_clause + file LICENSE
-Imports: sp
-NeedsCompilation: no
+  by the package sp, and the well-known binary (WKB) representation for
+  geometry specified by the Open Geospatial Consortium (OGC). Supports
+  Spatial objects of class SpatialPoints, SpatialPointsDataFrame, SpatialLines,
+  SpatialLinesDataFrame, SpatialPolygons, and SpatialPolygonsDataFrame.
+  Supports WKB geometry types Point, LineString, Polygon, MultiPoint,
+  MultiLineString, and MultiPolygon. Includes extensions to enable creation
+  of maps with TIBCO Spotfire.
 BugReports: https://github.com/ianmcook/wkb/issues
+NeedsCompilation: no
+License: BSD_3_clause + file LICENSE
