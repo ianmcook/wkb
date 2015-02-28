@@ -1,7 +1,7 @@
 Package: wkb
 Type: Package
 Title: Convert Between Spatial Objects and Well-Known Binary (WKB) Geometry
-Version: 0.1-0
+Version: 0.1-0.9000
 Imports: sp
 Date: 2015-02-28
 Author: TIBCO Software Inc.
