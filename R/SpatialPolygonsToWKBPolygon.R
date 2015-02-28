@@ -22,17 +22,20 @@
 #'   return value has the SpotfireColumnMetaData attribute set to enable TIBCO
 #'   Spotfire to recognize it as a WKB geometry representation.
 #' @examples
+#' # load package sp
+#' library(sp)
+#'
 #' # create an object of class SpatialPolygons
-#' triangle <- sp::Polygons(
+#' triangle <- Polygons(
 #'  list(
-#'    sp::Polygon(data.frame(x = c(2, 2.5, 3, 2), y = c(2, 3, 2, 2)))
+#'    Polygon(data.frame(x = c(2, 2.5, 3, 2), y = c(2, 3, 2, 2)))
 #'  ), "triangle")
-#' rectangles <- sp::Polygons(
+#' rectangles <- Polygons(
 #'   list(
-#'     sp::Polygon(data.frame(x = c(0, 0, 1, 1, 0), y = c(0, 1, 1, 0, 0))),
-#'     sp::Polygon(data.frame(x = c(0, 0, 2, 2, 0), y = c(-2, -1, -1, -2, -2)))
+#'     Polygon(data.frame(x = c(0, 0, 1, 1, 0), y = c(0, 1, 1, 0, 0))),
+#'     Polygon(data.frame(x = c(0, 0, 2, 2, 0), y = c(-2, -1, -1, -2, -2)))
 #'   ), "rectangles")
-#' Sp <- sp::SpatialPolygons(list(triangle, rectangles))
+#' Sp <- SpatialPolygons(list(triangle, rectangles))
 #'
 #' # convert to WKB Polygon
 #' wkb <- wkb:::SpatialPolygonsToWKBPolygon(Sp)
@@ -52,13 +55,13 @@ SpatialPolygonsToWKBPolygon <- function(obj) {
     on.exit(close(rc))
     writeBin(as.raw(c(1, 3, 0, 0, 0)), rc)
     rings <- mypolygon@Polygons
-    writeBin(length(rings), rc, size = 4)
+    writeBin(length(rings), rc, size = 4, endian = "little")
     lapply(X = rings, FUN = function(ring) {
       coords <- ring@coords
-      writeBin(nrow(coords), rc, size = 4)
+      writeBin(nrow(coords), rc, size = 4, endian = "little")
       apply(X = coords, MARGIN = 1, FUN = function(coord) {
-        writeBin(coord[1], rc, size = 8)
-        writeBin(coord[2], rc, size = 8)
+        writeBin(coord[1], rc, size = 8, endian = "little")
+        writeBin(coord[2], rc, size = 8, endian = "little")
         NULL
       })
     })
@@ -99,12 +102,13 @@ SpatialPolygonsToWKBPolygon <- function(obj) {
 #'
 #' Example usage at \code{\link{SpatialPolygonsToWKBPolygon}}
 #' @noRd
+#' @importFrom sp bbox
 SpatialPolygonsEnvelope <- function(obj) {
   coords <- as.data.frame(t(vapply(X = obj@polygons, FUN = function(mypolygon) {
-    c(XMax = sp::bbox(mypolygon)["x", "max"],
-      XMin = sp::bbox(mypolygon)["x", "min"],
-      YMax = sp::bbox(mypolygon)["y", "max"],
-      YMin = sp::bbox(mypolygon)["y", "min"],
+    c(XMax = bbox(mypolygon)["x", "max"],
+      XMin = bbox(mypolygon)["x", "min"],
+      YMax = bbox(mypolygon)["y", "max"],
+      YMin = bbox(mypolygon)["y", "min"],
       XCenter = mypolygon@labpt[1],
       YCenter = mypolygon@labpt[2])
   }, FUN.VALUE = rep(0, 6))))

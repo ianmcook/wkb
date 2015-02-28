@@ -25,16 +25,19 @@
 #'   return value has the SpotfireColumnMetaData attribute set to enable TIBCO
 #'   Spotfire to recognize it as a WKB geometry representation.
 #' @examples
+#' # load package sp
+#' library(sp)
+#'
 #' # create an object of class SpatialLines
 #' l1 <- data.frame(x = c(1, 2, 3), y = c(3, 2, 2))
 #' l1a <- data.frame(x = l1[, 1] + .05, y = l1[, 2] + .05)
 #' l2 <- data.frame(x = c(1, 2, 3), y = c(1, 1.5, 1))
-#' Sl1 <- sp::Line(l1)
-#' Sl1a <- sp::Line(l1a)
-#' Sl2 <- sp::Line(l2)
-#' S1 <- sp::Lines(list(Sl1, Sl1a), ID = "a")
-#' S2 <- sp::Lines(list(Sl2), ID = "b")
-#' Sl <- sp::SpatialLines(list(S1, S2))
+#' Sl1 <- Line(l1)
+#' Sl1a <- Line(l1a)
+#' Sl2 <- Line(l2)
+#' S1 <- Lines(list(Sl1, Sl1a), ID = "a")
+#' S2 <- Lines(list(Sl2), ID = "b")
+#' Sl <- SpatialLines(list(S1, S2))
 #'
 #' # convert to WKB MultiLineString
 #' wkb <- wkb:::SpatialLinesToWKBMultiLineString(Sl)
@@ -54,14 +57,14 @@ SpatialLinesToWKBMultiLineString <- function(obj) {
     on.exit(close(rc))
     writeBin(as.raw(c(1, 5, 0, 0, 0)), rc)
     lineStrings <- mylines@Lines
-    writeBin(length(lineStrings), rc, size = 4)
+    writeBin(length(lineStrings), rc, size = 4, endian = "little")
     lapply(X = lineStrings, FUN = function(myline) {
       writeBin(as.raw(c(1, 2, 0, 0, 0)), rc)
       coords <- myline@coords
-      writeBin(nrow(coords), rc, size = 4)
+      writeBin(nrow(coords), rc, size = 4, endian = "little")
       apply(X = coords, MARGIN = 1, FUN = function(coord) {
-        writeBin(coord[1], rc, size = 8)
-        writeBin(coord[2], rc, size = 8)
+        writeBin(coord[1], rc, size = 8, endian = "little")
+        writeBin(coord[2], rc, size = 8, endian = "little")
         NULL
       })
     })
@@ -100,11 +103,11 @@ SpatialLinesToWKBMultiLineString <- function(obj) {
 #' # create an object of class SpatialLines
 #' l1 <- data.frame(x = c(1, 2, 3), y = c(3, 2, 2))
 #' l2 <- data.frame(x = c(1, 2, 3), y = c(1, 1.5, 1))
-#' Sl1 <- sp::Line(l1)
-#' Sl2 <- sp::Line(l2)
-#' S1 <- sp::Lines(list(Sl1), ID = "a")
-#' S2 <- sp::Lines(list(Sl2), ID = "b")
-#' Sl <- sp::SpatialLines(list(S1, S2))
+#' Sl1 <- Line(l1)
+#' Sl2 <- Line(l2)
+#' S1 <- Lines(list(Sl1), ID = "a")
+#' S2 <- Lines(list(Sl2), ID = "b")
+#' Sl <- SpatialLines(list(S1, S2))
 #'
 #' # convert to WKB LineString
 #' wkb <- wkb:::SpatialLinesToWKBLineString(Sl)
@@ -133,10 +136,10 @@ SpatialLinesToWKBLineString <- function(obj) {
     }
     myline <- lineStrings[[1]]
     coords <- myline@coords
-    writeBin(nrow(coords), rc, size = 4)
+    writeBin(nrow(coords), rc, size = 4, endian = "little")
     apply(X = coords, MARGIN = 1, FUN = function(coord) {
-      writeBin(coord[1], rc, size = 8)
-      writeBin(coord[2], rc, size = 8)
+      writeBin(coord[1], rc, size = 8, endian = "little")
+      writeBin(coord[2], rc, size = 8, endian = "little")
       NULL
     })
     rawConnectionValue(rc)
@@ -180,17 +183,18 @@ SpatialLinesToWKBLineString <- function(obj) {
 #'
 #'   Example usage at \code{\link{SpatialLinesToWKBMultiLineString}}
 #' @noRd
+#' @importFrom sp bbox
 SpatialLinesEnvelope <- function(obj, centerfun = mean) {
   if(is.character(centerfun)) {
     centerfun <- eval(parse(text = centerfun))
   }
   coords <- as.data.frame(t(vapply(X = obj@lines, FUN = function(mylines) {
-    c(XMax = sp::bbox(mylines)["x", "max"],
-      XMin = sp::bbox(mylines)["x", "min"],
-      YMax = sp::bbox(mylines)["y", "max"],
-      YMin = sp::bbox(mylines)["y", "min"],
-      XCenter = centerfun(sp::bbox(mylines)["x", ], na.rm = TRUE),
-      YCenter = centerfun(sp::bbox(mylines)["y", ], na.rm = TRUE))
+    c(XMax = bbox(mylines)["x", "max"],
+      XMin = bbox(mylines)["x", "min"],
+      YMax = bbox(mylines)["y", "max"],
+      YMin = bbox(mylines)["y", "min"],
+      XCenter = centerfun(bbox(mylines)["x", ], na.rm = TRUE),
+      YCenter = centerfun(bbox(mylines)["y", ], na.rm = TRUE))
   }, FUN.VALUE = rep(0, 6))))
   if(identical(version$language, "TERR")) {
     attr(coords$XMax, "SpotfireColumnMetaData") <- list(MapChart.ColumnTypeId = "XMax")

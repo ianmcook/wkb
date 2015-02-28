@@ -26,13 +26,16 @@
 #'   return value has the SpotfireColumnMetaData attribute set to enable TIBCO
 #'   Spotfire to recognize it as a WKB geometry representation.
 #' @examples
+#' # load package sp
+#' library(sp)
+#'
 #' # create a list of objects of class SpatialPoints
 #' x1 = c(1, 2, 3, 4, 5)
 #' y1 = c(3, 2, 5, 1, 4)
 #' x2 <- c(9, 10, 11, 12, 13)
 #' y2 <- c(-1, -2, -3, -4, -5)
-#' Sp1 <- sp::SpatialPoints(data.frame(x1, y1))
-#' Sp2 <- sp::SpatialPoints(data.frame(x2, y2))
+#' Sp1 <- SpatialPoints(data.frame(x1, y1))
+#' Sp2 <- SpatialPoints(data.frame(x2, y2))
 #' obj <- list("a"=Sp1, "b"=Sp2)
 #'
 #' # convert to WKB MultiPoint
@@ -54,11 +57,11 @@ ListOfSpatialPointsToWKBMultiPoint <- function(obj) {
     on.exit(close(rc))
     writeBin(as.raw(c(1, 4, 0, 0, 0)), rc)
     coords <- mypoints@coords
-    writeBin(nrow(coords), rc, size = 4)
+    writeBin(nrow(coords), rc, size = 4, endian = "little")
     apply(X = coords, MARGIN = 1, FUN = function(coord) {
       writeBin(as.raw(c(1, 1, 0, 0, 0)), rc)
-      writeBin(coord[1], rc, size = 8)
-      writeBin(coord[2], rc, size = 8)
+      writeBin(coord[1], rc, size = 8, endian = "little")
+      writeBin(coord[2], rc, size = 8, endian = "little")
       NULL
     })
     rawConnectionValue(rc)
@@ -98,7 +101,7 @@ ListOfSpatialPointsToWKBMultiPoint <- function(obj) {
 #' # create an object of class SpatialPoints
 #' x = c(1, 2, 3, 4, 5)
 #' y = c(3, 2, 5, 1, 4)
-#' Sp <- sp::SpatialPoints(data.frame(x, y))
+#' Sp <- SpatialPoints(data.frame(x, y))
 #'
 #' # convert to WKB Point
 #' wkb <- wkb:::SpatialPointsToWKBPoint(Sp)
@@ -118,8 +121,8 @@ SpatialPointsToWKBPoint <- function(obj) {
     rc <- rawConnection(raw(0), "r+")
     on.exit(close(rc))
     writeBin(as.raw(c(1, 1, 0, 0, 0)), rc)
-    writeBin(coord[1], rc, size = 8)
-    writeBin(coord[2], rc, size = 8)
+    writeBin(coord[1], rc, size = 8, endian = "little")
+    writeBin(coord[2], rc, size = 8, endian = "little")
     list(rawConnectionValue(rc))
   }), unlist)
   if(identical(version$language, "TERR")) {
@@ -162,17 +165,18 @@ SpatialPointsToWKBPoint <- function(obj) {
 #'
 #'   Example usage at \code{\link{ListOfSpatialPointsToWKBMultiPoint}}
 #' @noRd
+#' @importFrom sp bbox
 ListOfSpatialPointsEnvelope <- function(obj, centerfun = mean) {
   if(is.character(centerfun)) {
     centerfun <- eval(parse(text = centerfun))
   }
   coords <- as.data.frame(t(vapply(X = obj, FUN = function(mypoints) {
-    c(XMax = sp::bbox(mypoints)[1, "max"],
-      XMin = sp::bbox(mypoints)[1, "min"],
-      YMax = sp::bbox(mypoints)[2, "max"],
-      YMin = sp::bbox(mypoints)[2, "min"],
-      XCenter = centerfun(sp::bbox(mypoints)[1, ], na.rm = TRUE),
-      YCenter = centerfun(sp::bbox(mypoints)[2, ], na.rm = TRUE))
+    c(XMax = bbox(mypoints)[1, "max"],
+      XMin = bbox(mypoints)[1, "min"],
+      YMax = bbox(mypoints)[2, "max"],
+      YMin = bbox(mypoints)[2, "min"],
+      XCenter = centerfun(bbox(mypoints)[1, ], na.rm = TRUE),
+      YCenter = centerfun(bbox(mypoints)[2, ], na.rm = TRUE))
   }, FUN.VALUE = rep(0, 6))))
   if(identical(version$language, "TERR")) {
     attr(coords$XMax, "SpotfireColumnMetaData") <- list(MapChart.ColumnTypeId = "XMax")

@@ -116,7 +116,11 @@
 #' @seealso \code{\link{writeWKB}}
 #' @keywords wkb
 #' @export
-readWKB <- function(wkb, id = NULL, proj4string = sp::CRS(as.character(NA))) {
+#' @importFrom sp CRS
+#' @importFrom sp SpatialPoints
+#' @importFrom sp SpatialLines
+#' @importFrom sp SpatialPolygons
+readWKB <- function(wkb, id = NULL, proj4string = CRS(as.character(NA))) {
   if(inherits(wkb, "raw") && (is.null(id) || length(id) == 1)) {
     wkb <- list(wkb)
   }
@@ -136,7 +140,7 @@ readWKB <- function(wkb, id = NULL, proj4string = sp::CRS(as.character(NA))) {
     stop("wkb and id must have same length")
   }
   if(is.character(proj4string)) {
-    proj4string = sp::CRS(proj4string)
+    proj4string = CRS(proj4string)
   }
   if(length(proj4string) != 1) {
     stop("proj4string must have length 1")
@@ -173,13 +177,13 @@ readWKB <- function(wkb, id = NULL, proj4string = sp::CRS(as.character(NA))) {
     stop("Elements of wkb cannot have different geometry types")
   }
   if(objClass == "numeric") {
-    sp::SpatialPoints(do.call("rbind", obj), proj4string = proj4string)
+    SpatialPoints(do.call("rbind", obj), proj4string = proj4string)
   } else if(objClass == "matrix" || objClass == "data.frame") {
-    lapply(X = obj, FUN = sp::SpatialPoints, proj4string = proj4string)
+    lapply(X = obj, FUN = SpatialPoints, proj4string = proj4string)
   } else if(objClass == "Lines") {
-    sp::SpatialLines(obj, proj4string = proj4string)
+    SpatialLines(obj, proj4string = proj4string)
   } else if(objClass == "Polygons") {
-    sp::SpatialPolygons(obj, proj4string = proj4string)
+    SpatialPolygons(obj, proj4string = proj4string)
   } else {
     stop("Unexpected object")
   }
@@ -199,9 +203,12 @@ readWkbMultiPoint <- function(rc, multiPointId) {
     readPoint(rc)
   }, numeric(2)))
 }
+
+#' @importFrom sp Lines
+#' @importFrom sp Line
 readWkbMultiLineString <- function(rc, multiLineStringId) {
   numLineStrings <- readInteger(rc)
-  sp::Lines(unlist(lapply(seq_len(numLineStrings), function(...) {
+  Lines(unlist(lapply(seq_len(numLineStrings), function(...) {
     byteOrder <- readByteOrder(rc)
     if(byteOrder != as.raw(1L)) {
       stop("Only little endian is supported")
@@ -211,12 +218,14 @@ readWkbMultiLineString <- function(rc, multiLineStringId) {
       stop("MultiLineStrings may contain only LineStrings")
     }
     numPoints <- readInteger(rc)
-    sp::Line(readPoints(rc, numPoints))
+    Line(readPoints(rc, numPoints))
   })), multiLineStringId)
 }
+
+#' @importFrom sp Polygons
 readWkbMultiPolygon <- function(rc, multiPolygonId) {
   numPolygons <- readInteger(rc)
-  sp::Polygons(unlist(lapply(seq_len(numPolygons), function(...) {
+  Polygons(unlist(lapply(seq_len(numPolygons), function(...) {
     byteOrder <- readByteOrder(rc)
     if(byteOrder != as.raw(1L)) {
       stop("Only little endian is supported")
@@ -229,46 +238,62 @@ readWkbMultiPolygon <- function(rc, multiPolygonId) {
     readLinearRings(rc, numRings)
   })), multiPolygonId)
 }
+
 readWkbPoint <- function(rc, pointId) {
   readPoint(rc)
 }
+
+#' @importFrom sp Lines
+#' @importFrom sp Line
 readWkbLineString <- function(rc, lineStringId) {
   numPoints <- readInteger(rc)
-  sp::Lines(list(sp::Line(readPoints(rc, numPoints))), lineStringId)
+  Lines(list(Line(readPoints(rc, numPoints))), lineStringId)
 }
+
+#' @importFrom sp Polygons
 readWkbPolygon <- function(rc, polygonId) {
   numRings <- readInteger(rc)
-  sp::Polygons(readLinearRings(rc, numRings), polygonId)
+  Polygons(readLinearRings(rc, numRings), polygonId)
 }
+
 readLinearRings <- function(rc, numRings) {
   lapply(seq_len(numRings), function(ringId) {
     readLinearRing(rc)
   })
 }
+
+#' @importFrom sp Polygon
 readLinearRing <- function(rc) {
   numPoints <- readInteger(rc)
-  sp::Polygon(readPoints(rc, numPoints))
+  Polygon(readPoints(rc, numPoints))
 }
+
 readPoints <- function(rc, numPoints) {
   t(vapply(seq_len(numPoints), function(pointId) {
     readPoint(rc)
   }, numeric(2)))
 }
+
 readPoint <- function(rc) {
   c(x = readDouble(rc), y = readDouble(rc))
 }
+
 readByteOrder <- function(rc) {
   readByte(rc)
 }
+
 readWkbType <- function(rc) {
   readInteger(rc)
 }
+
 readByte <- function(rc) {
   readBin(rc, what = "raw", size = 1L)
 }
+
 readInteger <- function(rc) {
-  readBin(rc, what = "integer", size = 4L)
+  readBin(rc, what = "integer", size = 4L, endian = "little")
 }
+
 readDouble <- function(rc) {
-  readBin(rc, what = "double", size = 8L)
+  readBin(rc, what = "double", size = 8L, endian = "little")
 }
