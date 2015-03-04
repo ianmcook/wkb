@@ -113,7 +113,7 @@
 #'   id = c("San Francisco", "New York"),
 #'   proj4string = sp::CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
 #' )
-#' @seealso \code{\link{writeWKB}}
+#' @seealso \code{\link{writeWKB}}, \code{\link{hex2raw}}
 #' @keywords wkb
 #' @export
 #' @importFrom sp CRS

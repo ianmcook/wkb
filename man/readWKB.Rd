@@ -127,7 +127,7 @@ obj <- readWKB(
 )
 }
 \seealso{
-\code{\link{writeWKB}}
+\code{\link{writeWKB}}, \code{\link{hex2raw}}
 }
 \keyword{wkb}
 
