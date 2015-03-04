@@ -12,6 +12,9 @@ representation.}
 }
 \value{
 A \code{\link[base]{raw}} vector.
+
+  The return value is a \code{list} of \code{raw} vectors when the argument
+  \code{hex} contains more than one hexadecimal representation.
 }
 \description{
 Converts a string hexadecimal representation to a \code{raw} vector.
@@ -40,7 +43,7 @@ hex <- c("0101000000000000000000f03f0000000000000840",
          "010100000000000000000000400000000000000040")
 
 # convert to list of two raw vectors
-wkb <- lapply(hex, hex2raw)
+wkb <- hex2raw(hex)
 }
 \seealso{
 \code{raw2hex} in package

@@ -8,6 +8,9 @@
 #'   representation.
 #' @details Non-hexadecimal characters are removed.
 #' @return A \code{\link[base]{raw}} vector.
+#'
+#'   The return value is a \code{list} of \code{raw} vectors when the argument
+#'   \code{hex} contains more than one hexadecimal representation.
 #' @examples
 #' # create a character string containing a hexadecimal representation
 #' hex <- "0101000000000000000000f03f0000000000000840"
@@ -29,22 +32,32 @@
 #'          "010100000000000000000000400000000000000040")
 #'
 #' # convert to list of two raw vectors
-#' wkb <- lapply(hex, hex2raw)
+#' wkb <- hex2raw(hex)
 #' @seealso \code{raw2hex} in package
 #'   \href{http://cran.r-project.org/package=PKI}{PKI}, \code{\link{readWKB}}
 #' @export
 hex2raw <- function(hex) {
-  if(!is.character(hex)) {
+  if(!(is.character(hex) || (is.list(hex) &&
+    vapply(X = hex, FUN = is.character, FUN.VALUE = logical(1))))) {
     stop("hex must be a character string or character vector")
   }
+  if(is.list(hex) || (length(hex) > 1 &&
+     all(vapply(X = hex, FUN = nchar, FUN.VALUE = integer(1)) > 2))) {
+    lapply(hex, .hex2raw)
+  } else {
+    .hex2raw(hex)
+  }
+}
+
+.hex2raw <- function(hex) {
   hex <- gsub("[^0-9a-fA-F]", "", hex)
   if(length(hex) == 1) {
-    if(nchar(hex) %% 2 != 0) {
+    if(nchar(hex) < 2 || nchar(hex) %% 2 != 0) {
       stop("hex is not a valid hexadecimal representation")
     }
     hex <- substring(hex, seq(1, nchar(hex), 2), seq(2, nchar(hex), 2))
   }
-  if(!all(lapply(hex, nchar) == 2)) {
+  if(!all(vapply(X = hex, FUN = nchar, FUN.VALUE = integer(1)) == 2)) {
     stop("hex is not a valid hexadecimal representation")
   }
   hex <- paste("0x", hex, sep = "")
