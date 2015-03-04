@@ -60,6 +60,5 @@ hex2raw <- function(hex) {
   if(!all(vapply(X = hex, FUN = nchar, FUN.VALUE = integer(1)) == 2)) {
     stop("hex is not a valid hexadecimal representation")
   }
-  hex <- paste("0x", hex, sep = "")
-  as.raw(hex)
+  as.raw(as.hexmode(hex))
 }
