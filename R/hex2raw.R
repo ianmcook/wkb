@@ -38,7 +38,7 @@
 #' @export
 hex2raw <- function(hex) {
   if(!(is.character(hex) || (is.list(hex) &&
-    vapply(X = hex, FUN = is.character, FUN.VALUE = logical(1))))) {
+    all(vapply(X = hex, FUN = is.character, FUN.VALUE = logical(1)))))) {
     stop("hex must be a character string or character vector")
   }
   if(is.list(hex) || (length(hex) > 1 &&
