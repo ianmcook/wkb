@@ -13,6 +13,8 @@
 #' @param obj an object of class
 #'   \code{\link[sp:SpatialPolygons-class]{SpatialPolygons}} or
 #'   \code{\link[sp:SpatialPolygonsDataFrame-class]{SpatialPolygonsDataFrame}}.
+#' @param endian The byte order (\code{"big"} or \code{"little"}) for encoding
+#'   numeric types. The default is \code{"little"}.
 #' @return A \code{list} with class \code{AsIs}. The length of the returned list
 #'   is the same as the length of the argument \code{obj}. Each element of the
 #'   returned list is a \code{\link[base]{raw}} vector consisting of a
@@ -46,22 +48,26 @@
 #' # calculate envelope columns and cbind to the data frame
 #' coords <- wkb:::SpatialPolygonsEnvelope(Sp)
 #' ds <- cbind(ds, coords)
-#' @seealso \code{\link{writeWKB}},
-#'   \code{\link{SpatialPolygonsEnvelope}}
+#' @seealso \code{\link{writeWKB}}, \code{\link{SpatialPolygonsEnvelope}}
 #' @noRd
-SpatialPolygonsToWKBPolygon <- function(obj) {
+SpatialPolygonsToWKBPolygon <- function(obj, endian) {
   wkb <- lapply(X = obj@polygons, FUN = function(mypolygon) {
     rc <- rawConnection(raw(0), "r+")
     on.exit(close(rc))
-    writeBin(as.raw(c(1, 3, 0, 0, 0)), rc)
+    if(endian == "big") {
+      writeBin(as.raw(0L), rc)
+    } else {
+      writeBin(as.raw(1L), rc)
+    }
+    writeBin(3L, rc, size = 4, endian = endian)
     rings <- mypolygon@Polygons
-    writeBin(length(rings), rc, size = 4, endian = "little")
+    writeBin(length(rings), rc, size = 4, endian = endian)
     lapply(X = rings, FUN = function(ring) {
       coords <- ring@coords
-      writeBin(nrow(coords), rc, size = 4, endian = "little")
+      writeBin(nrow(coords), rc, size = 4, endian = endian)
       apply(X = coords, MARGIN = 1, FUN = function(coord) {
-        writeBin(coord[1], rc, size = 8, endian = "little")
-        writeBin(coord[2], rc, size = 8, endian = "little")
+        writeBin(coord[1], rc, size = 8, endian = endian)
+        writeBin(coord[2], rc, size = 8, endian = endian)
         NULL
       })
     })
@@ -80,8 +86,8 @@ SpatialPolygonsToWKBPolygon <- function(obj) {
 #' \code{SpatialPolygonsDataFrame} and returns a data frame with six columns
 #' representing the envelope of each object of class \code{Polygons}.
 #'
-#' This function is called by the \code{\link{writeEnvelope}} function. Call
-#' the \code{\link{writeEnvelope}} function instead of calling this function
+#' This function is called by the \code{\link{writeEnvelope}} function. Call the
+#' \code{\link{writeEnvelope}} function instead of calling this function
 #' directly.
 #'
 #' @param obj an object of class
@@ -89,10 +95,10 @@ SpatialPolygonsToWKBPolygon <- function(obj) {
 #'   \code{\link[sp:SpatialPolygonsDataFrame-class]{SpatialPolygonsDataFrame}}.
 #' @return A data frame with six columns named XMax, XMin, YMax, YMin, XCenter,
 #'   and YCenter. The first four columns represent the corners of the bounding
-#'   box of each object of class \code{Polygons}. The last two columns represent the
-#'   center of the bounding box of each object of class \code{Polygons}. The number of
-#'   rows in the returned data frame is the same as the length of the argument
-#'   \code{obj}.
+#'   box of each object of class \code{Polygons}. The last two columns represent
+#'   the center of the bounding box of each object of class \code{Polygons}. The
+#'   number of rows in the returned data frame is the same as the length of the
+#'   argument \code{obj}.
 #'
 #'   When this function is run in TIBCO Enterprise Runtime for R (TERR), the
 #'   columns of the returned data frame have the SpotfireColumnMetaData
@@ -100,7 +106,7 @@ SpatialPolygonsToWKBPolygon <- function(obj) {
 #'   envelope information.
 #' @seealso \code{\link{writeEnvelope}}
 #'
-#' Example usage at \code{\link{SpatialPolygonsToWKBPolygon}}
+#'   Example usage at \code{\link{SpatialPolygonsToWKBPolygon}}
 #' @noRd
 #' @importFrom sp bbox
 SpatialPolygonsEnvelope <- function(obj) {

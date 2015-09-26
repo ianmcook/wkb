@@ -4,10 +4,13 @@
 \alias{writeWKB}
 \title{Convert Spatial Objects to WKB}
 \usage{
-writeWKB(obj)
+writeWKB(obj, endian = "little")
 }
 \arguments{
 \item{obj}{object inheriting class \code{\link[sp:Spatial-class]{Spatial}}.}
+
+\item{endian}{The byte order (\code{"big"} or \code{"little"}) for encoding
+numeric types. The default is \code{"little"}.}
 }
 \value{
 A \code{list} with class \code{AsIs}. The length of the returned list
@@ -24,7 +27,10 @@ A \code{list} with class \code{AsIs}. The length of the returned list
 \code{SpatialPolygons} or \code{SpatialPolygonsFrame} \tab Polygon\cr
 }
 
-Returned WKB geometry representations use little-endian byte order.
+The byte order of numeric types in the returned WKB geometry
+representations depends on the value of the argument \code{endian}.
+Little-endian byte order is known as NDR encoding, and big-endian byte
+order is known as XDR encoding.
 
 When this function is run in TIBCO Enterprise Runtime for R (TERR), the
 return value has the SpotfireColumnMetaData attribute set to enable TIBCO

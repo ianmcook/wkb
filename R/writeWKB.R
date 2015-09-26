@@ -7,6 +7,8 @@
 #' representations.
 #'
 #' @param obj object inheriting class \code{\link[sp:Spatial-class]{Spatial}}.
+#' @param endian The byte order (\code{"big"} or \code{"little"}) for encoding
+#'   numeric types. The default is \code{"little"}.
 #' @details The argument \code{obj} may be an object of class
 #'   \code{\link[sp:SpatialPoints-class]{SpatialPoints}},
 #'   \code{\link[sp:SpatialPointsDataFrame-class]{SpatialPointsDataFrame}},
@@ -31,7 +33,10 @@
 #' \code{SpatialPolygons} or \code{SpatialPolygonsFrame} \tab Polygon\cr
 #' }
 #'
-#' Returned WKB geometry representations use little-endian byte order.
+#' The byte order of numeric types in the returned WKB geometry
+#' representations depends on the value of the argument \code{endian}.
+#' Little-endian byte order is known as NDR encoding, and big-endian byte
+#' order is known as XDR encoding.
 #'
 #' When this function is run in TIBCO Enterprise Runtime for R (TERR), the
 #' return value has the SpotfireColumnMetaData attribute set to enable TIBCO
@@ -102,10 +107,13 @@
 #' @seealso \code{\link{writeEnvelope}}, \code{\link{readWKB}}
 #' @keywords wkb
 #' @export
-writeWKB <- function(obj) {
+writeWKB <- function(obj, endian = "little") {
+  if(!identical(endian, "little") && !identical(endian, "big")) {
+    stop("endian must have value \"little\" or \"big\"")
+  }
   if(inherits(obj, c("SpatialPoints", "SpatialPointsDataFrame"), which = FALSE)) {
 
-    SpatialPointsToWKBPoint(obj)
+    SpatialPointsToWKBPoint(obj, endian)
 
   } else if(inherits(obj, "list") && length(obj) > 0 &&
           all(vapply(
@@ -116,15 +124,15 @@ writeWKB <- function(obj) {
             )
           ) {
 
-    ListOfSpatialPointsToWKBMultiPoint(obj)
+    ListOfSpatialPointsToWKBMultiPoint(obj, endian)
 
   } else if(inherits(obj, c("SpatialLines", "SpatialLinesDataFrame"), which = FALSE)) {
 
-    SpatialLinesToWKBMultiLineString(obj)
+    SpatialLinesToWKBMultiLineString(obj, endian)
 
   } else if(inherits(obj, c("SpatialPolygons", "SpatialPolygonsDataFrame"), which = FALSE)) {
 
-    SpatialPolygonsToWKBPolygon(obj)
+    SpatialPolygonsToWKBPolygon(obj, endian)
 
   } else {
 

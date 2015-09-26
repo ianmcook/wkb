@@ -16,6 +16,8 @@
 #' @param obj an object of class
 #'   \code{\link[sp:SpatialLines-class]{SpatialLines}} or
 #'   \code{\link[sp:SpatialLinesDataFrame-class]{SpatialLinesDataFrame}}.
+#' @param endian The byte order (\code{"big"} or \code{"little"}) for encoding
+#'   numeric types. The default is \code{"little"}.
 #' @return A \code{list} with class \code{AsIs}. The length of the returned list
 #'   is the same as the length of the argument \code{obj}. Each element of the
 #'   returned list is a \code{\link[base]{raw}} vector consisting of a
@@ -51,20 +53,30 @@
 #' @seealso \code{\link{writeWKB}}, \code{\link{SpatialLinesToWKBLineString}},
 #'   \code{\link{SpatialLinesEnvelope}}
 #' @noRd
-SpatialLinesToWKBMultiLineString <- function(obj) {
+SpatialLinesToWKBMultiLineString <- function(obj, endian) {
   wkb <- lapply(X = obj@lines, FUN = function(mylines) {
     rc <- rawConnection(raw(0), "r+")
     on.exit(close(rc))
-    writeBin(as.raw(c(1, 5, 0, 0, 0)), rc)
+    if(endian == "big") {
+      writeBin(as.raw(0L), rc)
+    } else {
+      writeBin(as.raw(1L), rc)
+    }
+    writeBin(5L, rc, size = 4, endian = endian)
     lineStrings <- mylines@Lines
-    writeBin(length(lineStrings), rc, size = 4, endian = "little")
+    writeBin(length(lineStrings), rc, size = 4, endian = endian)
     lapply(X = lineStrings, FUN = function(myline) {
-      writeBin(as.raw(c(1, 2, 0, 0, 0)), rc)
+      if(endian == "big") {
+        writeBin(as.raw(0L), rc)
+      } else {
+        writeBin(as.raw(1L), rc)
+      }
+      writeBin(2L, rc, size = 4, endian = endian)
       coords <- myline@coords
-      writeBin(nrow(coords), rc, size = 4, endian = "little")
+      writeBin(nrow(coords), rc, size = 4, endian = endian)
       apply(X = coords, MARGIN = 1, FUN = function(coord) {
-        writeBin(coord[1], rc, size = 8, endian = "little")
-        writeBin(coord[2], rc, size = 8, endian = "little")
+        writeBin(coord[1], rc, size = 8, endian = endian)
+        writeBin(coord[2], rc, size = 8, endian = endian)
         NULL
       })
     })
@@ -91,6 +103,8 @@ SpatialLinesToWKBMultiLineString <- function(obj) {
 #' @param obj an object of class
 #'   \code{\link[sp:SpatialLines-class]{SpatialLines}} or
 #'   \code{\link[sp:SpatialLinesDataFrame-class]{SpatialLinesDataFrame}}.
+#' @param endian The byte order (\code{"big"} or \code{"little"}) for encoding
+#'   numeric types. The default is \code{"little"}.
 #' @return A \code{list} with class \code{AsIs}. The length of the returned list
 #'   is the same as the length of the argument \code{obj}. Each element of the
 #'   returned list is a \code{\link[base]{raw}} vector consisting of a
@@ -122,11 +136,16 @@ SpatialLinesToWKBMultiLineString <- function(obj) {
 #'   \code{\link{SpatialLinesToWKBMultiLineString}},
 #'   \code{\link{SpatialLinesEnvelope}}
 #' @noRd
-SpatialLinesToWKBLineString <- function(obj) {
+SpatialLinesToWKBLineString <- function(obj, endian) {
   wkb <- lapply(X = obj@lines, FUN = function(mylines) {
     rc <- rawConnection(raw(0), "r+")
     on.exit(close(rc))
-    writeBin(as.raw(c(1, 2, 0, 0, 0)), rc)
+    if(endian == "big") {
+      writeBin(as.raw(0L), rc)
+    } else {
+      writeBin(as.raw(1L), rc)
+    }
+    writeBin(2L, rc, size = 4, endian = endian)
     lineStrings <- mylines@Lines
     if(isTRUE(length(lineStrings) > 1)) {
       stop("Argument obj must have only one object of class Lines in each ",
@@ -136,10 +155,10 @@ SpatialLinesToWKBLineString <- function(obj) {
     }
     myline <- lineStrings[[1]]
     coords <- myline@coords
-    writeBin(nrow(coords), rc, size = 4, endian = "little")
+    writeBin(nrow(coords), rc, size = 4, endian = endian)
     apply(X = coords, MARGIN = 1, FUN = function(coord) {
-      writeBin(coord[1], rc, size = 8, endian = "little")
-      writeBin(coord[2], rc, size = 8, endian = "little")
+      writeBin(coord[1], rc, size = 8, endian = endian)
+      writeBin(coord[2], rc, size = 8, endian = endian)
       NULL
     })
     rawConnectionValue(rc)
@@ -165,15 +184,15 @@ SpatialLinesToWKBLineString <- function(obj) {
 #' @param obj an object of class
 #'   \code{\link[sp:SpatialLines-class]{SpatialLines}} or
 #'   \code{\link[sp:SpatialLinesDataFrame-class]{SpatialLinesDataFrame}}.
-#' @param centerfun function to apply to the x-axis limits and y-axis limits
-#'   of the bounding box to obtain the x-coordinate and y-coordinate of the
-#'   center of the bounding box.
+#' @param centerfun function to apply to the x-axis limits and y-axis limits of
+#'   the bounding box to obtain the x-coordinate and y-coordinate of the center
+#'   of the bounding box.
 #' @return A data frame with six columns named XMax, XMin, YMax, YMin, XCenter,
 #'   and YCenter. The first four columns represent the corners of the bounding
-#'   box of each object of class \code{Lines}. The last two columns represent the
-#'   center of the bounding box of each object of class \code{Lines}. The number of
-#'   rows in the returned data frame is the same as the length of the argument
-#'   \code{obj}.
+#'   box of each object of class \code{Lines}. The last two columns represent
+#'   the center of the bounding box of each object of class \code{Lines}. The
+#'   number of rows in the returned data frame is the same as the length of the
+#'   argument \code{obj}.
 #'
 #'   When this function is run in TIBCO Enterprise Runtime for R (TERR), the
 #'   columns of the returned data frame have the SpotfireColumnMetaData
