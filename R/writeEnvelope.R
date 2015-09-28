@@ -26,10 +26,10 @@
 #'   rows in the returned data frame is the same as the length of the argument
 #'   \code{obj}.
 #'
-#'   When this function is run in TIBCO Enterprise Runtime for R (TERR), the
-#'   columns of the returned data frame have the SpotfireColumnMetaData
-#'   attribute set to enable TIBCO Spotfire to recognize them as containing
-#'   envelope information.
+#'   When this function is run in TIBCO Enterprise Runtime for R
+#'   (\acronym{TERR}), the columns of the returned data frame have the
+#'   SpotfireColumnMetaData attribute set to enable TIBCO Spotfire to recognize
+#'   them as containing envelope information.
 #' @seealso Example usage at \code{\link{writeWKB}}
 #' @export
 writeEnvelope <- function(obj, centerfun = mean) {

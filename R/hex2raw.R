@@ -34,7 +34,7 @@
 #' # convert to list of two raw vectors
 #' wkb <- hex2raw(hex)
 #' @seealso \code{raw2hex} in package
-#'   \href{http://cran.r-project.org/package=PKI}{PKI}, \code{\link{readWKB}}
+#'   \href{http://cran.r-project.org/package=PKI}{\pkg{PKI}}, \code{\link{readWKB}}
 #' @export
 hex2raw <- function(hex) {
   if(!(is.character(hex) || (is.list(hex) &&

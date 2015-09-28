@@ -1,9 +1,9 @@
 # Convert an R spatial object to a well-known binary (WKB) geometry
 # representation
 
-#' Convert Spatial Objects to WKB
+#' Convert Spatial Objects to \acronym{WKB}
 #'
-#' Converts \code{Spatial} objects to well-known binary (WKB) geometry
+#' Converts \code{Spatial} objects to well-known binary (\acronym{WKB}) geometry
 #' representations.
 #'
 #' @param obj object inheriting class \code{\link[sp:Spatial-class]{Spatial}}.
@@ -21,26 +21,26 @@
 #'   \code{\link[sp:SpatialPointsDataFrame-class]{SpatialPointsDataFrame}}.
 #' @return A \code{list} with class \code{AsIs}. The length of the returned list
 #'   is the same as the length of the argument \code{obj}. Each element of the
-#'   returned list is a \code{\link[base]{raw}} vector consisting of a WKB
-#'   geometry representation. The WKB geometry type depends on the class of
-#'   \code{obj} as shown in the table below.
+#'   returned list is a \code{\link[base]{raw}} vector consisting of a
+#'   \acronym{WKB} geometry representation. The \acronym{WKB} geometry type
+#'   depends on the class of \code{obj} as shown in the table below.
 #'
 #' \tabular{ll}{
-#' \strong{Class of \code{obj}} \tab \strong{Type of WKB geometry}\cr
+#' \strong{Class of \code{obj}} \tab \strong{Type of \acronym{WKB} geometry}\cr
 #' \code{SpatialPoints} or \code{SpatialPointsDataFrame} \tab Point\cr
 #' \code{list} of \code{SpatialPoints} or \code{SpatialPointsDataFrame} \tab MultiPoint\cr
 #' \code{SpatialLines} or \code{SpatialLinesDataFrame} \tab MultiLineString\cr
 #' \code{SpatialPolygons} or \code{SpatialPolygonsFrame} \tab Polygon\cr
 #' }
 #'
-#' The byte order of numeric types in the returned WKB geometry
+#' The byte order of numeric types in the returned \acronym{WKB} geometry
 #' representations depends on the value of the argument \code{endian}.
-#' Little-endian byte order is known as NDR encoding, and big-endian byte
-#' order is known as XDR encoding.
+#' Little-endian byte order is known as \acronym{NDR} encoding, and big-endian
+#' byte order is known as \acronym{XDR} encoding.
 #'
-#' When this function is run in TIBCO Enterprise Runtime for R (TERR), the
-#' return value has the SpotfireColumnMetaData attribute set to enable TIBCO
-#' Spotfire to recognize it as a WKB geometry representation.
+#' When this function is run in TIBCO Enterprise Runtime for R (\acronym{TERR}),
+#' the return value has the SpotfireColumnMetaData attribute set to enable TIBCO
+#' Spotfire to recognize it as a \acronym{WKB} geometry representation.
 #' @examples
 #' # load package sp
 #' library(sp)

@@ -1,25 +1,26 @@
 # Convert a well-known binary (WKB) geometry representation to an R spatial
 # object
 
-#' Convert WKB to Spatial Objects
+#' Convert \acronym{WKB} to Spatial Objects
 #'
-#' Converts well-known binary (WKB) geometry representations to \code{Spatial}
-#' objects.
+#' Converts well-known binary (\acronym{WKB}) geometry representations to
+#' \code{Spatial} objects.
 #'
 #' @param wkb \code{list} in which each element is a \code{\link[base]{raw}}
-#'   vector consisting of a WKB geometry representation.
+#'   vector consisting of a \acronym{WKB} geometry representation.
 #' @param id character vector of unique identifiers of geometries. The length of
 #'   \code{id} must be the same as the length of the \code{wkb} list.
 #' @param proj4string projection string of class
 #'   \code{\link[sp:CRS-class]{CRS}}.
-#' @details Supported WKB geometry types are Point, LineString, Polygon,
-#'   MultiPoint, MultiLineString, and MultiPolygon. All elements in the
-#'   \code{list} must have the same WKB geometry type. The WKB geometry
-#'   representations may use little-endian or big-endian byte order.
+#' @details Supported \acronym{WKB} geometry types are Point, LineString,
+#'   Polygon, MultiPoint, MultiLineString, and MultiPolygon. All elements in the
+#'   \code{list} must have the same \acronym{WKB} geometry type. The
+#'   \acronym{WKB} geometry representations may use little-endian or big-endian
+#'   byte order.
 #'
 #'   The argument \code{wkb} may also be a \code{\link[base]{raw}} vector
-#'   consisting of one WKB geometry representation. In that case, the argument
-#'   \code{id} must have length one.
+#'   consisting of one \acronym{WKB} geometry representation. In that case, the
+#'   argument \code{id} must have length one.
 #' @return An object inheriting class \code{\link[sp:Spatial-class]{Spatial}}.
 #'
 #'   The return value may be an object of class
@@ -28,10 +29,11 @@
 #'   \code{\link[sp:SpatialPolygons-class]{SpatialPolygons}}, or a \code{list}
 #'   in which each element is an object of class
 #'   \code{\link[sp:SpatialPoints-class]{SpatialPoints}}. The class of the
-#'   return value depends on the WKB geometry type as shown in the table below.
+#'   return value depends on the \acronym{WKB} geometry type as shown in the
+#'   table below.
 #'
 #'   \tabular{ll}{
-#'   \strong{Type of WKB geometry} \tab \strong{Class of return value}\cr
+#'   \strong{Type of \acronym{WKB} geometry} \tab \strong{Class of return value}\cr
 #'   Point \tab \code{SpatialPoints}\cr
 #'   LineString \tab \code{SpatialLines}\cr
 #'   Polygon \tab \code{SpatialPolygons}\cr

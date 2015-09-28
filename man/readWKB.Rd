@@ -2,13 +2,13 @@
 % Please edit documentation in R/readWKB.R
 \name{readWKB}
 \alias{readWKB}
-\title{Convert WKB to Spatial Objects}
+\title{Convert \acronym{WKB} to Spatial Objects}
 \usage{
 readWKB(wkb, id = NULL, proj4string = CRS(as.character(NA)))
 }
 \arguments{
 \item{wkb}{\code{list} in which each element is a \code{\link[base]{raw}}
-vector consisting of a WKB geometry representation.}
+vector consisting of a \acronym{WKB} geometry representation.}
 
 \item{id}{character vector of unique identifiers of geometries. The length of
 \code{id} must be the same as the length of the \code{wkb} list.}
@@ -25,10 +25,11 @@ An object inheriting class \code{\link[sp:Spatial-class]{Spatial}}.
   \code{\link[sp:SpatialPolygons-class]{SpatialPolygons}}, or a \code{list}
   in which each element is an object of class
   \code{\link[sp:SpatialPoints-class]{SpatialPoints}}. The class of the
-  return value depends on the WKB geometry type as shown in the table below.
+  return value depends on the \acronym{WKB} geometry type as shown in the
+  table below.
 
   \tabular{ll}{
-  \strong{Type of WKB geometry} \tab \strong{Class of return value}\cr
+  \strong{Type of \acronym{WKB} geometry} \tab \strong{Class of return value}\cr
   Point \tab \code{SpatialPoints}\cr
   LineString \tab \code{SpatialLines}\cr
   Polygon \tab \code{SpatialPolygons}\cr
@@ -38,18 +39,19 @@ An object inheriting class \code{\link[sp:Spatial-class]{Spatial}}.
   }
 }
 \description{
-Converts well-known binary (WKB) geometry representations to \code{Spatial}
-objects.
+Converts well-known binary (\acronym{WKB}) geometry representations to
+\code{Spatial} objects.
 }
 \details{
-Supported WKB geometry types are Point, LineString, Polygon,
-  MultiPoint, MultiLineString, and MultiPolygon. All elements in the
-  \code{list} must have the same WKB geometry type. The WKB geometry
-  representations may use little-endian or big-endian byte order.
+Supported \acronym{WKB} geometry types are Point, LineString,
+  Polygon, MultiPoint, MultiLineString, and MultiPolygon. All elements in the
+  \code{list} must have the same \acronym{WKB} geometry type. The
+  \acronym{WKB} geometry representations may use little-endian or big-endian
+  byte order.
 
   The argument \code{wkb} may also be a \code{\link[base]{raw}} vector
-  consisting of one WKB geometry representation. In that case, the argument
-  \code{id} must have length one.
+  consisting of one \acronym{WKB} geometry representation. In that case, the
+  argument \code{id} must have length one.
 }
 \examples{
 # create a list of WKB geometry representations of type Point

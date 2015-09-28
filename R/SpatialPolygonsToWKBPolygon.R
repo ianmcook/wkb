@@ -1,11 +1,11 @@
 # Convert a SpatialPolygons or SpatialPolygonsDataFrame object
 #  to a well-known binary (WKB) geometry representation of polygons
 
-#' Convert SpatialPolygons to WKB Polygon
+#' Convert SpatialPolygons to \acronym{WKB} Polygon
 #'
 #' Converts an object of class \code{SpatialPolygons} or
-#' \code{SpatialPolygonsDataFrame} to a list of well-known binary (WKB) geometry
-#' representations of type Polygon.
+#' \code{SpatialPolygonsDataFrame} to a list of well-known binary
+#' (\acronym{WKB}) geometry representations of type Polygon.
 #'
 #' This function is called by the \code{\link{writeWKB}} function. Call the
 #' \code{\link{writeWKB}} function instead of calling this function directly.
@@ -18,11 +18,12 @@
 #' @return A \code{list} with class \code{AsIs}. The length of the returned list
 #'   is the same as the length of the argument \code{obj}. Each element of the
 #'   returned list is a \code{\link[base]{raw}} vector consisting of a
-#'   well-known binary (WKB) geometry representation of type Polygon.
+#'   well-known binary (\acronym{WKB}) geometry representation of type Polygon.
 #'
-#'   When this function is run in TIBCO Enterprise Runtime for R (TERR), the
-#'   return value has the SpotfireColumnMetaData attribute set to enable TIBCO
-#'   Spotfire to recognize it as a WKB geometry representation.
+#'   When this function is run in TIBCO Enterprise Runtime for R
+#'   (\acronym{TERR}), the return value has the SpotfireColumnMetaData attribute
+#'   set to enable TIBCO Spotfire to recognize it as a \acronym{WKB} geometry
+#'   representation.
 #' @examples
 #' # load package sp
 #' library(sp)
@@ -100,10 +101,10 @@ SpatialPolygonsToWKBPolygon <- function(obj, endian) {
 #'   number of rows in the returned data frame is the same as the length of the
 #'   argument \code{obj}.
 #'
-#'   When this function is run in TIBCO Enterprise Runtime for R (TERR), the
-#'   columns of the returned data frame have the SpotfireColumnMetaData
-#'   attribute set to enable TIBCO Spotfire to recognize them as containing
-#'   envelope information.
+#'   When this function is run in TIBCO Enterprise Runtime for R
+#'   (\acronym{TERR}), the columns of the returned data frame have the
+#'   SpotfireColumnMetaData attribute set to enable TIBCO Spotfire to recognize
+#'   them as containing envelope information.
 #' @seealso \code{\link{writeEnvelope}}
 #'
 #'   Example usage at \code{\link{SpatialPolygonsToWKBPolygon}}

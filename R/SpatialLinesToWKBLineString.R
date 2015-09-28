@@ -1,11 +1,11 @@
 # Convert a SpatialLines or SpatialLinesDataFrame object
 #  to a well-known binary (WKB) geometry representation of line segments
 
-#' Convert SpatialLines to WKB MultiLineString
+#' Convert SpatialLines to \acronym{WKB} MultiLineString
 #'
 #' Converts an object of class \code{SpatialLines} or
-#' \code{SpatialLinesDataFrame} to a list of well-known binary (WKB) geometry
-#' representations of type MultiLineString.
+#' \code{SpatialLinesDataFrame} to a list of well-known binary (\acronym{WKB})
+#' geometry representations of type MultiLineString.
 #'
 #' This function is called by the \code{\link{writeWKB}} function. Call the
 #' \code{\link{writeWKB}} function instead of calling this function directly.
@@ -21,11 +21,13 @@
 #' @return A \code{list} with class \code{AsIs}. The length of the returned list
 #'   is the same as the length of the argument \code{obj}. Each element of the
 #'   returned list is a \code{\link[base]{raw}} vector consisting of a
-#'   well-known binary (WKB) geometry representation of type MultiLineString.
+#'   well-known binary (\acronym{WKB}) geometry representation of type
+#'   MultiLineString.
 #'
-#'   When this function is run in TIBCO Enterprise Runtime for R (TERR), the
-#'   return value has the SpotfireColumnMetaData attribute set to enable TIBCO
-#'   Spotfire to recognize it as a WKB geometry representation.
+#'   When this function is run in TIBCO Enterprise Runtime for R
+#'   (\acronym{TERR}), the return value has the SpotfireColumnMetaData attribute
+#'   set to enable TIBCO Spotfire to recognize it as a \acronym{WKB} geometry
+#'   representation.
 #' @examples
 #' # load package sp
 #' library(sp)
@@ -89,11 +91,11 @@ SpatialLinesToWKBMultiLineString <- function(obj, endian) {
   I(wkb)
 }
 
-#' Convert SpatialLines to WKB LineString
+#' Convert SpatialLines to \acronym{WKB} LineString
 #'
 #' Converts an object of class \code{SpatialLines} or
-#' \code{SpatialLinesDataFrame} to a list of well-known binary (WKB) geometry
-#' representations of type LineString.
+#' \code{SpatialLinesDataFrame} to a list of well-known binary (\acronym{WKB})
+#' geometry representations of type LineString.
 #'
 #' The argument \code{obj} must have only one object of class \code{Lines} in
 #' each position of the \code{list} in slot \code{lines}. If there are multiple
@@ -108,11 +110,13 @@ SpatialLinesToWKBMultiLineString <- function(obj, endian) {
 #' @return A \code{list} with class \code{AsIs}. The length of the returned list
 #'   is the same as the length of the argument \code{obj}. Each element of the
 #'   returned list is a \code{\link[base]{raw}} vector consisting of a
-#'   well-known binary (WKB) geometry representation of type LineString.
+#'   well-known binary (\acronym{WKB}) geometry representation of type
+#'   LineString.
 #'
-#'   When this function is run in TIBCO Enterprise Runtime for R (TERR), the
-#'   return value has the SpotfireColumnMetaData attribute set to enable TIBCO
-#'   Spotfire to recognize it as a WKB geometry representation.
+#'   When this function is run in TIBCO Enterprise Runtime for R
+#'   (\acronym{TERR}), the return value has the SpotfireColumnMetaData attribute
+#'   set to enable TIBCO Spotfire to recognize it as a \acronym{WKB} geometry
+#'   representation.
 #' @examples
 #' # create an object of class SpatialLines
 #' l1 <- data.frame(x = c(1, 2, 3), y = c(3, 2, 2))
@@ -194,10 +198,10 @@ SpatialLinesToWKBLineString <- function(obj, endian) {
 #'   number of rows in the returned data frame is the same as the length of the
 #'   argument \code{obj}.
 #'
-#'   When this function is run in TIBCO Enterprise Runtime for R (TERR), the
-#'   columns of the returned data frame have the SpotfireColumnMetaData
-#'   attribute set to enable TIBCO Spotfire to recognize them as containing
-#'   envelope information.
+#'   When this function is run in TIBCO Enterprise Runtime for R
+#'   (\acronym{TERR}), the columns of the returned data frame have the
+#'   SpotfireColumnMetaData attribute set to enable TIBCO Spotfire to recognize
+#'   them as containing envelope information.
 #' @seealso \code{\link{writeEnvelope}}
 #'
 #'   Example usage at \code{\link{SpatialLinesToWKBMultiLineString}}
