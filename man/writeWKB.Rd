@@ -25,6 +25,7 @@ A \code{list} with class \code{AsIs}. The length of the returned list
 \code{list} of \code{SpatialPoints} or \code{SpatialPointsDataFrame} \tab MultiPoint\cr
 \code{SpatialLines} or \code{SpatialLinesDataFrame} \tab MultiLineString\cr
 \code{SpatialPolygons} or \code{SpatialPolygonsFrame} \tab Polygon\cr
+\code{list} in which each element is one of the above \tab GeometryCollection\cr
 }
 
 The byte order of numeric types in the returned \acronym{WKB} geometry

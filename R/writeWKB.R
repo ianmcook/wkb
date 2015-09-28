@@ -18,7 +18,8 @@
 #'   \code{\link[sp:SpatialPolygonsDataFrame-class]{SpatialPolygonsDataFrame}},
 #'   or a \code{list} in which each element is an object of class
 #'   \code{\link[sp:SpatialPoints-class]{SpatialPoints}} or
-#'   \code{\link[sp:SpatialPointsDataFrame-class]{SpatialPointsDataFrame}}.
+#'   \code{\link[sp:SpatialPointsDataFrame-class]{SpatialPointsDataFrame}}, or a
+#'   \code{list} in which each element is one of the above objects.
 #' @return A \code{list} with class \code{AsIs}. The length of the returned list
 #'   is the same as the length of the argument \code{obj}. Each element of the
 #'   returned list is a \code{\link[base]{raw}} vector consisting of a
@@ -31,6 +32,7 @@
 #' \code{list} of \code{SpatialPoints} or \code{SpatialPointsDataFrame} \tab MultiPoint\cr
 #' \code{SpatialLines} or \code{SpatialLinesDataFrame} \tab MultiLineString\cr
 #' \code{SpatialPolygons} or \code{SpatialPolygonsFrame} \tab Polygon\cr
+#' \code{list} in which each element is one of the above \tab GeometryCollection\cr
 #' }
 #'
 #' The byte order of numeric types in the returned \acronym{WKB} geometry
@@ -111,35 +113,52 @@ writeWKB <- function(obj, endian = "little") {
   if(!identical(endian, "little") && !identical(endian, "big")) {
     stop("endian must have value \"little\" or \"big\"")
   }
+  wkb <- .writeWKB(obj, endian)
+  if(identical(version$language, "TERR")) {
+    attr(wkb, "SpotfireColumnMetaData") <-
+      list(ContentType = "application/x-wkb", MapChart.ColumnTypeId = "Geometry")
+  }
+  I(wkb)
+}
+
+.writeWKB <- function(obj, endian) {
   if(inherits(obj, c("SpatialPoints", "SpatialPointsDataFrame"), which = FALSE)) {
 
-    SpatialPointsToWKBPoint(obj, endian)
+    .SpatialPointsToWKBPoint(obj, endian)
 
-  } else if(inherits(obj, "list") && length(obj) > 0 &&
-          all(vapply(
-            X = obj,
-            FUN = inherits,
-            FUN.VALUE = logical(1),
-            c("SpatialPoints", "SpatialPointsDataFrame"))
-            )
-          ) {
+  } else if(inherits(obj, "list") && length(obj) > 0) {
 
-    ListOfSpatialPointsToWKBMultiPoint(obj, endian)
+    if(all(vapply(
+      X = obj,
+      FUN = inherits,
+      FUN.VALUE = logical(1),
+      c("SpatialPoints", "SpatialPointsDataFrame"))
+    )
+    ) {
+
+      .ListOfSpatialPointsToWKBMultiPoint(obj, endian)
+
+    } else {
+
+      .ListOfSpatialToWKBGeometryCollection(obj, endian)
+
+    }
 
   } else if(inherits(obj, c("SpatialLines", "SpatialLinesDataFrame"), which = FALSE)) {
 
-    SpatialLinesToWKBMultiLineString(obj, endian)
+    .SpatialLinesToWKBMultiLineString(obj, endian)
 
   } else if(inherits(obj, c("SpatialPolygons", "SpatialPolygonsDataFrame"), which = FALSE)) {
 
-    SpatialPolygonsToWKBPolygon(obj, endian)
+    .SpatialPolygonsToWKBPolygon(obj, endian)
 
   } else {
 
     stop("obj must be an object of class SpatialPoints, SpatialPointsDataFrame, ",
          "SpatialLines, SpatialLinesDataFrame, SpatialPolygons, ",
          "or SpatialPolygonsDataFrame, or a list of objects of class ",
-          "SpatialPoints or SpatialPointsDataFrame")
+         "SpatialPoints or SpatialPointsDataFrame, or a list in which each ",
+         "element is one of the above")
 
   }
 }

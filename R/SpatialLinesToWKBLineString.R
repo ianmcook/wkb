@@ -56,7 +56,16 @@
 #'   \code{\link{SpatialLinesEnvelope}}
 #' @noRd
 SpatialLinesToWKBMultiLineString <- function(obj, endian) {
-  wkb <- lapply(X = obj@lines, FUN = function(mylines) {
+  wkb <- .SpatialLinesToWKBMultiLineString(obj, endian)
+  if(identical(version$language, "TERR")) {
+    attr(wkb, "SpotfireColumnMetaData") <-
+      list(ContentType = "application/x-wkb", MapChart.ColumnTypeId = "Geometry")
+  }
+  I(wkb)
+}
+
+.SpatialLinesToWKBMultiLineString <- function(obj, endian) {
+  lapply(X = obj@lines, FUN = function(mylines) {
     rc <- rawConnection(raw(0), "r+")
     on.exit(close(rc))
     if(endian == "big") {
@@ -84,11 +93,6 @@ SpatialLinesToWKBMultiLineString <- function(obj, endian) {
     })
     rawConnectionValue(rc)
   })
-  if(identical(version$language, "TERR")) {
-    attr(wkb, "SpotfireColumnMetaData") <-
-      list(ContentType = "application/x-wkb", MapChart.ColumnTypeId = "Geometry")
-  }
-  I(wkb)
 }
 
 #' Convert SpatialLines to \acronym{WKB} LineString
@@ -141,7 +145,16 @@ SpatialLinesToWKBMultiLineString <- function(obj, endian) {
 #'   \code{\link{SpatialLinesEnvelope}}
 #' @noRd
 SpatialLinesToWKBLineString <- function(obj, endian) {
-  wkb <- lapply(X = obj@lines, FUN = function(mylines) {
+  wkb <- .SpatialLinesToWKBLineString(obj, endian)
+  if(identical(version$language, "TERR")) {
+    attr(wkb, "SpotfireColumnMetaData") <-
+      list(ContentType = "application/x-wkb", MapChart.ColumnTypeId = "Geometry")
+  }
+  I(wkb)
+}
+
+.SpatialLinesToWKBLineString <- function(obj, endian) {
+  lapply(X = obj@lines, FUN = function(mylines) {
     rc <- rawConnection(raw(0), "r+")
     on.exit(close(rc))
     if(endian == "big") {
@@ -167,13 +180,7 @@ SpatialLinesToWKBLineString <- function(obj, endian) {
     })
     rawConnectionValue(rc)
   })
-  if(identical(version$language, "TERR")) {
-    attr(wkb, "SpotfireColumnMetaData") <-
-      list(ContentType = "application/x-wkb", MapChart.ColumnTypeId = "Geometry")
-  }
-  I(wkb)
 }
-
 
 #' Envelope of SpatialLines
 #'

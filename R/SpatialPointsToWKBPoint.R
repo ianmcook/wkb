@@ -56,7 +56,16 @@
 #'   \code{\link{ListOfSpatialPointsEnvelope}}
 #' @noRd
 ListOfSpatialPointsToWKBMultiPoint <- function(obj, endian) {
-  wkb <- lapply(X = obj, FUN = function(mypoints) {
+  wkb <- .ListOfSpatialPointsToWKBMultiPoint(obj, endian)
+  if(identical(version$language, "TERR")) {
+    attr(wkb, "SpotfireColumnMetaData") <-
+      list(ContentType = "application/x-wkb", MapChart.ColumnTypeId = "Geometry")
+  }
+  I(wkb)
+}
+
+.ListOfSpatialPointsToWKBMultiPoint <- function(obj, endian) {
+  lapply(X = obj, FUN = function(mypoints) {
     rc <- rawConnection(raw(0), "r+")
     on.exit(close(rc))
     if(endian == "big") {
@@ -80,11 +89,6 @@ ListOfSpatialPointsToWKBMultiPoint <- function(obj, endian) {
     })
     rawConnectionValue(rc)
   })
-  if(identical(version$language, "TERR")) {
-    attr(wkb, "SpotfireColumnMetaData") <-
-      list(ContentType = "application/x-wkb", MapChart.ColumnTypeId = "Geometry")
-  }
-  I(wkb)
 }
 
 #' Convert SpatialPoints to \acronym{WKB} Point
@@ -135,7 +139,16 @@ ListOfSpatialPointsToWKBMultiPoint <- function(obj, endian) {
 #'   \code{\link{SpatialPointsEnvelope}}
 #' @noRd
 SpatialPointsToWKBPoint <- function(obj, endian) {
-  wkb <- lapply(apply(X = obj@coords, MARGIN = 1, FUN = function(coord) {
+  wkb <- .SpatialPointsToWKBPoint(obj, endian)
+  if(identical(version$language, "TERR")) {
+    attr(wkb, "SpotfireColumnMetaData") <-
+      list(ContentType = "application/x-wkb", MapChart.ColumnTypeId = "Geometry")
+  }
+  I(wkb)
+}
+
+.SpatialPointsToWKBPoint <- function(obj, endian) {
+  lapply(apply(X = obj@coords, MARGIN = 1, FUN = function(coord) {
     rc <- rawConnection(raw(0), "r+")
     on.exit(close(rc))
     if(endian == "big") {
@@ -148,11 +161,6 @@ SpatialPointsToWKBPoint <- function(obj, endian) {
     writeBin(coord[2], rc, size = 8, endian = endian)
     list(rawConnectionValue(rc))
   }), unlist)
-  if(identical(version$language, "TERR")) {
-    attr(wkb, "SpotfireColumnMetaData") <-
-      list(ContentType = "application/x-wkb", MapChart.ColumnTypeId = "Geometry")
-  }
-  I(wkb)
 }
 
 #' Envelope of List of SpatialPoints

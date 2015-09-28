@@ -52,7 +52,16 @@
 #' @seealso \code{\link{writeWKB}}, \code{\link{SpatialPolygonsEnvelope}}
 #' @noRd
 SpatialPolygonsToWKBPolygon <- function(obj, endian) {
-  wkb <- lapply(X = obj@polygons, FUN = function(mypolygon) {
+  wkb <- .SpatialPolygonsToWKBPolygon(obj, endian)
+  if(identical(version$language, "TERR")) {
+    attr(wkb, "SpotfireColumnMetaData") <-
+      list(ContentType = "application/x-wkb", MapChart.ColumnTypeId = "Geometry")
+  }
+  I(wkb)
+}
+
+.SpatialPolygonsToWKBPolygon <- function(obj, endian) {
+  lapply(X = obj@polygons, FUN = function(mypolygon) {
     rc <- rawConnection(raw(0), "r+")
     on.exit(close(rc))
     if(endian == "big") {
@@ -74,11 +83,6 @@ SpatialPolygonsToWKBPolygon <- function(obj, endian) {
     })
     rawConnectionValue(rc)
   })
-  if(identical(version$language, "TERR")) {
-    attr(wkb, "SpotfireColumnMetaData") <-
-      list(ContentType = "application/x-wkb", MapChart.ColumnTypeId = "Geometry")
-  }
-  I(wkb)
 }
 
 #' Envelope of SpatialPolygons
