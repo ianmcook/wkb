@@ -55,7 +55,8 @@ hex2raw <- function(hex) {
     if(nchar(hex) < 2 || nchar(hex) %% 2 != 0) {
       stop("hex is not a valid hexadecimal representation")
     }
-    hex <- substring(hex, seq(1, nchar(hex), 2), seq(2, nchar(hex), 2))
+    hex <- strsplit(hex, character(0))[[1]]
+    hex <- paste0(hex[c(TRUE, FALSE)], hex[c(FALSE, TRUE)])
   }
   if(!all(vapply(X = hex, FUN = nchar, FUN.VALUE = integer(1)) == 2)) {
     stop("hex is not a valid hexadecimal representation")
