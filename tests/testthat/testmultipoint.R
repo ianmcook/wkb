@@ -43,8 +43,8 @@ test_that("list of SpatialPoints objects converts to little-endian WKB MultiPoin
   expect_equal(wkb, refwkb)
 })
 
-test_that("little-endian WKB MultiPoint representation converts to list of SpatialPoints objects", {
-  # convert little-endian WKB MultiPoint representation to list of SpatialPoints objects
+test_that("big-endian WKB MultiPoint representation converts to list of SpatialPoints objects", {
+  # convert big-endian WKB MultiPoint representation to list of SpatialPoints objects
   obj <- readWKB(refwkbbe)
 
   # test
