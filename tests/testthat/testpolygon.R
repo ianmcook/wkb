@@ -72,8 +72,8 @@ refwkbbe <- I(list(
            0x00))
 ))
 
-test_that("big-endian WKB Polygon representation converts to SpatialPolygons object", {
-  # convert big-endian WKB Polygon representation to SpatialPolygons object
+test_that("little-endian WKB Polygon representation converts to SpatialPolygons object", {
+  # convert little-endian WKB Polygon representation to SpatialPolygons object
   obj <- readWKB(refwkb)
 
   # test
