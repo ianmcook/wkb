@@ -126,24 +126,6 @@ writeWKB <- function(obj, endian = "little") {
 
     .SpatialPointsToWKBPoint(obj, endian)
 
-  } else if(inherits(obj, "list") && length(obj) > 0) {
-
-    if(all(vapply(
-      X = obj,
-      FUN = inherits,
-      FUN.VALUE = logical(1),
-      c("SpatialPoints", "SpatialPointsDataFrame"))
-    )
-    ) {
-
-      .ListOfSpatialPointsToWKBMultiPoint(obj, endian)
-
-    } else {
-
-      .ListOfSpatialToWKBGeometryCollection(obj, endian)
-
-    }
-
   } else if(inherits(obj, c("SpatialLines", "SpatialLinesDataFrame"), which = FALSE)) {
 
     .SpatialLinesToWKBMultiLineString(obj, endian)
@@ -151,6 +133,28 @@ writeWKB <- function(obj, endian = "little") {
   } else if(inherits(obj, c("SpatialPolygons", "SpatialPolygonsDataFrame"), which = FALSE)) {
 
     .SpatialPolygonsToWKBPolygon(obj, endian)
+
+  } else if(inherits(obj, "list") && length(obj) > 0 &&
+            all(vapply(
+              X = obj,
+              FUN = inherits,
+              FUN.VALUE = logical(1),
+              c("SpatialPoints", "SpatialPointsDataFrame"))
+            )
+  ) {
+
+    .ListOfSpatialPointsToWKBMultiPoint(obj, endian)
+
+  } else if(inherits(obj, "list") && length(obj) > 0 &&
+            all(vapply(
+              X = obj,
+              FUN = inherits,
+              FUN.VALUE = logical(1),
+              c("Spatial", "list"))
+            )
+  ) {
+
+    .ListOfSpatialToWKBGeometryCollection(obj, endian)
 
   } else {
 
