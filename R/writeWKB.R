@@ -128,7 +128,8 @@ writeWKB <- function(obj, endian = "little") {
               X = obj,
               FUN = inherits,
               FUN.VALUE = logical(1),
-              c("SpatialPoints", "SpatialPointsDataFrame"))
+              c("SpatialPoints", "SpatialPointsDataFrame"),
+              which = FALSE)
             )
   ) {
 
