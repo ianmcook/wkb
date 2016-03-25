@@ -6,7 +6,7 @@ Imports: sp
 Suggests: testthat
 Date: 2015-09-27
 Author: TIBCO Software Inc.
-Maintainer: Ian Cook <icook@tibco.com>
+Maintainer: Ian Cook <ianmcook@gmail.com>
 Description: Utility functions to convert between the 'Spatial' classes
   specified by the package 'sp', and the well-known binary '(WKB)'
   representation for geometry specified by the Open Geospatial Consortium.
