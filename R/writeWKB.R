@@ -30,7 +30,7 @@
 #' \code{SpatialPoints} or \code{SpatialPointsDataFrame} \tab Point\cr
 #' \code{list} of \code{SpatialPoints} or \code{SpatialPointsDataFrame} \tab MultiPoint\cr
 #' \code{SpatialLines} or \code{SpatialLinesDataFrame} \tab MultiLineString\cr
-#' \code{SpatialPolygons} or \code{SpatialPolygonsFrame} \tab Polygon\cr
+#' \code{SpatialPolygons} or \code{SpatialPolygonsFrame} \tab MultiPolygon\cr
 #' }
 #'
 #' The byte order of numeric types in the returned \acronym{WKB} geometry
@@ -94,7 +94,7 @@
 #'    ), "rectangles")
 #' obj <- SpatialPolygons(list(triangle, rectangles))
 #'
-#' # convert to WKB Polygon
+#' # convert to WKB MultiPolygon
 #' wkb <- writeWKB(obj)
 #'
 #'
@@ -121,7 +121,7 @@ writeWKB <- function(obj, endian = "little") {
 
   } else if(inherits(obj, c("SpatialPolygons", "SpatialPolygonsDataFrame"), which = FALSE)) {
 
-    SpatialPolygonsToWKBPolygon(obj, endian)
+    SpatialPolygonsToWKBMultiPolygon(obj, endian)
 
   } else if(inherits(obj, "list") && length(obj) > 0 &&
             all(vapply(

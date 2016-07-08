@@ -24,7 +24,7 @@ A \code{list} with class \code{AsIs}. The length of the returned list
 \code{SpatialPoints} or \code{SpatialPointsDataFrame} \tab Point\cr
 \code{list} of \code{SpatialPoints} or \code{SpatialPointsDataFrame} \tab MultiPoint\cr
 \code{SpatialLines} or \code{SpatialLinesDataFrame} \tab MultiLineString\cr
-\code{SpatialPolygons} or \code{SpatialPolygonsFrame} \tab Polygon\cr
+\code{SpatialPolygons} or \code{SpatialPolygonsFrame} \tab MultiPolygon\cr
 }
 
 The byte order of numeric types in the returned \acronym{WKB} geometry
@@ -105,7 +105,7 @@ rectangles <- Polygons(
    ), "rectangles")
 obj <- SpatialPolygons(list(triangle, rectangles))
 
-# convert to WKB Polygon
+# convert to WKB MultiPolygon
 wkb <- writeWKB(obj)
 
 

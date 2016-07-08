@@ -1,6 +1,6 @@
 library(wkb)
 library(sp)
-context("Conversion to and from WKB Polygon representations")
+context("Conversion from WKB Polygon representations")
 
 # create an object of class SpatialPolygons
 triangle <- Polygons(
@@ -80,26 +80,10 @@ test_that("little-endian WKB Polygon representation converts to SpatialPolygons 
   expect_equal(obj, refobj)
 })
 
-test_that("SpatialPolygons object converts to little-endian WKB Polygon representation", {
-  # convert SpatialPolygons object to little-endian WKB Polygon representation
-  wkb <- writeWKB(refobj)
-
-  # test
-  expect_equal(wkb, refwkb)
-})
-
 test_that("big-endian WKB Polygon representation converts to SpatialPolygons object", {
   # convert big-endian WKB Polygon representation to SpatialPolygons object
   obj <- readWKB(refwkbbe)
 
   # test
   expect_equal(obj, refobj)
-})
-
-test_that("SpatialPolygons object converts to big-endian WKB Polygon representation", {
-  # convert SpatialPolygons object to big-endian WKB Polygon representation
-  wkbbe <- writeWKB(refobj, endian = "big")
-
-  # test
-  expect_equal(wkbbe, refwkbbe)
 })
