@@ -165,13 +165,13 @@ readWKB <- function(wkb, id = NULL, proj4string = CRS(as.character(NA))) {
     }
     wkbType <- readWkbType(rc, endian)
     if(wkbType == 1L) {
-      readWkbPoint(rc, Id, endian)
+      readWkbPoint(rc, endian)
     } else if(wkbType == 2L) {
       readWkbLineString(rc, Id, endian)
     } else if(wkbType == 3L) {
       readWkbPolygon(rc, Id, endian)
     } else if(wkbType == 4L) {
-      readWkbMultiPoint(rc, Id, endian)
+      readWkbMultiPoint(rc, endian)
     } else if(wkbType == 5L) {
       readWkbMultiLineString(rc, Id, endian)
     } else if(wkbType == 6L) {
@@ -205,7 +205,7 @@ readWKB <- function(wkb, id = NULL, proj4string = CRS(as.character(NA))) {
   }
 }
 
-readWkbMultiPoint <- function(rc, multiPointId, endian) {
+readWkbMultiPoint <- function(rc, endian) {
   numPoints <- readInteger(rc, endian)
   t(vapply(seq_len(numPoints), function(...) {
     byteOrder <- readByteOrder(rc)
@@ -261,7 +261,7 @@ readWkbMultiPolygon <- function(rc, multiPolygonId, endian) {
   })), multiPolygonId)
 }
 
-readWkbPoint <- function(rc, pointId, endian) {
+readWkbPoint <- function(rc, endian) {
   readPoint(rc, endian)
 }
 
