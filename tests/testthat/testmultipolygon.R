@@ -3,6 +3,7 @@ library(sp)
 context("Conversion to and from WKB MultiPolygon representations")
 
 # create an object of class SpatialPolygons
+# in which one or more Polygons objects contain multiple Polygon objects
 triangle <- Polygons(
   list(
     Polygon(data.frame(x = c(2, 2.5, 3, 2), y = c(2, 3, 2, 2)))
@@ -82,7 +83,9 @@ test_that("little-endian WKB MultiPolygon representation converts to SpatialPoly
   expect_equal(obj, refobj)
 })
 
-test_that("SpatialPolygons object converts to little-endian WKB MultiPolygon representation", {
+test_that(paste(
+  "SpatialPolygons object in which one or more Polygons objects contain multiple Polygon",
+  "objects converts to little-endian WKB MultiPolygon representation"), {
   # convert SpatialPolygons object to little-endian WKB MultiPolygon representation
   wkb <- writeWKB(refobj)
 
@@ -98,7 +101,9 @@ test_that("big-endian WKB MultiPolygon representation converts to SpatialPolygon
   expect_equal(obj, refobj)
 })
 
-test_that("SpatialPolygons object converts to big-endian WKB MultiPolygon representation", {
+test_that(paste(
+    "SpatialPolygons object in which one or more Polygons objects contain multiple Polygon",
+    "objects converts to big-endian WKB MultiPolygon representation"), {
   # convert SpatialPolygons object to big-endian WKB MultiPolygon representation
   wkbbe <- writeWKB(refobj, endian = "big")
 

@@ -30,8 +30,12 @@
 #' \code{SpatialPoints} or \code{SpatialPointsDataFrame} \tab Point\cr
 #' \code{list} of \code{SpatialPoints} or \code{SpatialPointsDataFrame} \tab MultiPoint\cr
 #' \code{SpatialLines} or \code{SpatialLinesDataFrame} \tab MultiLineString\cr
-#' \code{SpatialPolygons} or \code{SpatialPolygonsFrame} \tab MultiPolygon\cr
+#' \code{SpatialPolygons} or \code{SpatialPolygonsFrame} \tab Polygon or MultiPolygon\cr
 #' }
+#'
+#' A \code{SpatialPolygons} or \code{SpatialPolygonsFrame} object is represented
+#' as \acronym{WKB} Polygons if each \code{Polygons} object within it represents
+#' a single polygon; otherwise it is represented as \acronym{WKB} MultiPolygons.
 #'
 #' The byte order of numeric types in the returned \acronym{WKB} geometry
 #' representations depends on the value of the argument \code{endian}.
@@ -121,7 +125,32 @@ writeWKB <- function(obj, endian = "little") {
 
   } else if(inherits(obj, c("SpatialPolygons", "SpatialPolygonsDataFrame"), which = FALSE)) {
 
-    SpatialPolygonsToWKBMultiPolygon(obj, endian)
+    isPolygon <- all(vapply(
+      X = obj@polygons,
+      FUN = function(mypolygons) {
+        length(mypolygons) == 1 &&
+          all(
+            vapply(
+              X = mypolygons@Polygons[-1],
+              FUN = function(mypolygon) {
+                mypolygon@hole
+              },
+              FUN.VALUE = logical(1)
+            )
+          )
+      },
+      FUN.VALUE = logical(1)
+    ))
+
+    if(isPolygon) {
+
+      SpatialPolygonsToWKBPolygon(obj, endian)
+
+    } else {
+
+      SpatialPolygonsToWKBMultiPolygon(obj, endian)
+
+    }
 
   } else if(inherits(obj, "list") && length(obj) > 0 &&
             all(vapply(

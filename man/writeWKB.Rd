@@ -24,8 +24,12 @@ A \code{list} with class \code{AsIs}. The length of the returned list
 \code{SpatialPoints} or \code{SpatialPointsDataFrame} \tab Point\cr
 \code{list} of \code{SpatialPoints} or \code{SpatialPointsDataFrame} \tab MultiPoint\cr
 \code{SpatialLines} or \code{SpatialLinesDataFrame} \tab MultiLineString\cr
-\code{SpatialPolygons} or \code{SpatialPolygonsFrame} \tab MultiPolygon\cr
+\code{SpatialPolygons} or \code{SpatialPolygonsFrame} \tab Polygon or MultiPolygon\cr
 }
+
+A \code{SpatialPolygons} or \code{SpatialPolygonsFrame} object is represented
+as \acronym{WKB} Polygons if each \code{Polygons} object within it represents
+a single polygon; otherwise it is represented as \acronym{WKB} MultiPolygons.
 
 The byte order of numeric types in the returned \acronym{WKB} geometry
 representations depends on the value of the argument \code{endian}.
