@@ -135,8 +135,14 @@ readWKB <- function(wkb, id = NULL, proj4string = CRS(as.character(NA))) {
   if(!all(vapply(X = wkb, FUN = inherits, FUN.VALUE = logical(1), "raw"))) {
     stop("Each element of wkb must be a raw vector")
   }
+  namesSpecified <- TRUE
   if(is.null(id)) {
-    id <- as.character(seq_along(wkb))
+    if(is.null(names(wkb))) {
+      namesSpecified <- FALSE
+      id <- as.character(seq_along(wkb))
+    } else {
+      id <- names(wkb)
+    }
   }
   if(!identical(length(wkb), length(id))) {
     stop("wkb and id must have same length")
@@ -181,8 +187,14 @@ readWKB <- function(wkb, id = NULL, proj4string = CRS(as.character(NA))) {
     stop("Elements of wkb cannot have different geometry types")
   }
   if(objClass == "numeric") {
+    if(namesSpecified) {
+      names(obj) <- id
+    }
     SpatialPoints(do.call("rbind", obj), proj4string = proj4string)
   } else if(objClass == "matrix" || objClass == "data.frame") {
+    if(namesSpecified) {
+      names(obj) <- id
+    }
     lapply(X = obj, FUN = SpatialPoints, proj4string = proj4string)
   } else if(objClass == "Lines") {
     SpatialLines(obj, proj4string = proj4string)
