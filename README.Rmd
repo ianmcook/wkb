@@ -1,0 +1,20 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# wkb
+
+[![Build Status](https://travis-ci.org/ianmcook/wkb.svg?branch=master)](https://travis-ci.org/ianmcook/wkb)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/wkb)](http://cran.r-project.org/package=wkb)
+
+Convert between the `Spatial` classes specified by the package `sp` and the well-known binary (WKB) representation for geometry specified by the Open Geospatial Consortium.
