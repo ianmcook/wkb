@@ -4,7 +4,6 @@ Title: Convert Between Spatial Objects and Well-Known Binary Geometry
 Version: 0.4-0
 Imports: sp
 Suggests: testthat
-Date: 2019-12-05
 Author: TIBCO Software Inc.
 Maintainer: Ian Cook <ianmcook@gmail.com>
 Description: Utility functions to convert between the 'Spatial' classes
