@@ -182,7 +182,7 @@ readWKB <- function(wkb, id = NULL, proj4string = CRS(as.character(NA))) {
       stop("Supported geometry types are Point, LineString, Polygon, MultiPoint, MultiLineString, and MultiPolygon")
     }
   }, SIMPLIFY = FALSE, USE.NAMES = FALSE)
-  objClass <- unique(vapply(obj, class, character(1)))
+  objClass <- unique(vapply(obj, function(x) class(x)[1], character(1)))
   if(isTRUE(length(objClass) > 1)) {
     stop("Elements of wkb cannot have different geometry types")
   }
