@@ -18,4 +18,5 @@ Description: Utility functions to convert between the 'Spatial' classes
 BugReports: https://github.com/ianmcook/wkb/issues
 NeedsCompilation: no
 License: BSD_3_clause + file LICENSE
+Encoding: UTF-8
 RoxygenNote: 6.1.1
