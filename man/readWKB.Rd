@@ -132,4 +132,3 @@ obj <- readWKB(
 \code{\link{writeWKB}}, \code{\link{hex2raw}}
 }
 \keyword{wkb}
-

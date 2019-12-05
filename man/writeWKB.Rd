@@ -124,4 +124,3 @@ ds <- cbind(ds, coords)
 \code{\link{writeEnvelope}}, \code{\link{readWKB}}
 }
 \keyword{wkb}
-

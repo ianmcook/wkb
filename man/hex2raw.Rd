@@ -47,6 +47,5 @@ wkb <- hex2raw(hex)
 }
 \seealso{
 \code{raw2hex} in package
-  \href{http://cran.r-project.org/package=PKI}{\pkg{PKI}}, \code{\link{readWKB}}
+  \href{https://cran.r-project.org/package=PKI}{\pkg{PKI}}, \code{\link{readWKB}}
 }
-

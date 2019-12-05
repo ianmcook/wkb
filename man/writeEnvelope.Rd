@@ -45,4 +45,3 @@ representing the envelope of each element in the \code{Spatial} object.
 \seealso{
 Example usage at \code{\link{writeWKB}}
 }
-
